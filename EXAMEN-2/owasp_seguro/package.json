@@ -1,0 +1,22 @@
+{
+  "name": "owasp-dashboard-vuln",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "db:up": "docker-compose up -d",
+    "db:down": "docker-compose down -v",
+    "migrate": "node scripts/migrate.js"
+  },
+  "dependencies": {
+    "next": "13.4.12",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "dotenv": "16.1.4",
+    "pg": "8.11.0",
+    "jsonwebtoken": "9.0.0"
+  }
+  
+}

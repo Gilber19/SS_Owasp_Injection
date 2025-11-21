@@ -1,3 +1,21 @@
+/*
+ * ================================================================================================
+ * ⚠️⚠️⚠️ WARNING: INTENTIONALLY VULNERABLE CODE - FOR EDUCATIONAL PURPOSES ONLY ⚠️⚠️⚠️
+ * ================================================================================================
+ * 
+ * This file contains INTENTIONALLY INSECURE code to demonstrate OWASP injection vulnerabilities.
+ * 
+ * NEVER USE THIS CODE IN PRODUCTION OR COPY IT TO REAL APPLICATIONS
+ * 
+ * This code is vulnerable to:
+ * - SQL Injection (OWASP A03:2021)
+ * - Cross-Site Scripting (XSS)
+ * - Information Disclosure
+ * 
+ * For secure implementations, see the secure-project directory.
+ * ================================================================================================
+ */
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
@@ -81,11 +99,15 @@ app.get('/', (req, res) => {
 });
 
 // VULNERABLE: SQL Injection in login endpoint
+// ⚠️ WARNING: THIS CODE IS INTENTIONALLY INSECURE FOR EDUCATIONAL PURPOSES
+// ⚠️ NEVER USE THIS PATTERN IN PRODUCTION CODE
+// ⚠️ This demonstrates OWASP A03:2021 - Injection vulnerability
 app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
   // INSECURE: Direct string concatenation - vulnerable to SQL injection
+  // DO NOT COPY THIS CODE - This is vulnerable by design
   const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
   
   console.log('Executing query:', query);
@@ -121,10 +143,14 @@ app.post('/login', (req, res) => {
 });
 
 // VULNERABLE: SQL Injection in search endpoint
+// ⚠️ WARNING: THIS CODE IS INTENTIONALLY INSECURE FOR EDUCATIONAL PURPOSES
+// ⚠️ NEVER USE THIS PATTERN IN PRODUCTION CODE
+// ⚠️ This demonstrates OWASP A03:2021 - Injection vulnerability
 app.get('/search', (req, res) => {
   const searchQuery = req.query.query || '';
 
   // INSECURE: Direct string concatenation - vulnerable to SQL injection
+  // DO NOT COPY THIS CODE - This is vulnerable by design
   const query = `SELECT * FROM products WHERE name LIKE '%${searchQuery}%'`;
   
   console.log('Executing query:', query);

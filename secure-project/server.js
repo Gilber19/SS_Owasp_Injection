@@ -10,6 +10,17 @@ const db = new sqlite3.Database('./database.db');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// HTML escaping to prevent XSS
+function escapeHtml(unsafe) {
+  if (unsafe === null || unsafe === undefined) return '';
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 // Input validation helper functions
 function validateUsername(username) {
   // Allow only alphanumeric characters and underscores, 3-20 characters
@@ -160,12 +171,13 @@ app.post('/login', (req, res) => {
         if (result) {
           res.send(`
             <h2>Login Successful! ✓</h2>
-            <p>Welcome, ${row.username}!</p>
-            <p>Email: ${row.email}</p>
-            <p>Role: ${row.role}</p>
+            <p>Welcome, ${escapeHtml(row.username)}!</p>
+            <p>Email: ${escapeHtml(row.email)}</p>
+            <p>Role: ${escapeHtml(row.role)}</p>
             <div class="info">
               <strong>Security Note:</strong> This login used parameterized queries 
               and bcrypt password hashing to prevent SQL injection and protect passwords.
+              Output is also HTML-escaped to prevent XSS attacks.
             </div>
             <a href="/">Go Back</a>
           `);
@@ -212,12 +224,12 @@ app.get('/search', (req, res) => {
     }
 
     let results = '<h2>Search Results</h2>';
-    results += '<div class="info"><strong>Security Note:</strong> This search uses parameterized queries to prevent SQL injection</div>';
+    results += '<div class="info"><strong>Security Note:</strong> This search uses parameterized queries to prevent SQL injection and HTML escaping to prevent XSS</div>';
     
     if (rows.length > 0) {
       results += '<ul>';
       rows.forEach(row => {
-        results += `<li><strong>${row.name}</strong> - ${row.description} - $${row.price}</li>`;
+        results += `<li><strong>${escapeHtml(row.name)}</strong> - ${escapeHtml(row.description)} - $${escapeHtml(row.price)}</li>`;
       });
       results += '</ul>';
     } else {

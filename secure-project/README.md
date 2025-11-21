@@ -32,7 +32,27 @@ db.get(query, [username], callback);
 - The database driver handles escaping automatically
 - User input is treated as data, never as SQL code
 
-### 2. Input Validation
+### 2. HTML Output Escaping (XSS Prevention)
+
+All user-generated content is escaped before displaying in HTML:
+
+```javascript
+function escapeHtml(unsafe) {
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+```
+
+**Benefits:**
+- Prevents Cross-Site Scripting (XSS) attacks
+- Ensures malicious scripts in data can't execute
+- Displays special characters safely
+
+### 3. Input Validation
 
 We validate all user inputs before processing:
 
@@ -48,7 +68,7 @@ function validateUsername(username) {
 - Enforces expected data formats
 - Reduces attack surface
 
-### 3. Input Sanitization
+### 4. Input Sanitization
 
 For search queries, we sanitize input:
 
@@ -63,7 +83,7 @@ function sanitizeSearchInput(input) {
 - Limits input length to prevent buffer issues
 - Additional defense layer (defense in depth)
 
-### 4. Password Hashing
+### 5. Password Hashing
 
 Passwords are hashed using bcrypt:
 
@@ -77,7 +97,7 @@ bcrypt.compare(plainPassword, hashedPassword, callback);
 - Even if database is compromised, passwords remain protected
 - Bcrypt is designed to be slow, preventing brute-force attacks
 
-### 5. Generic Error Messages
+### 6. Generic Error Messages
 
 We don't reveal system details in error messages:
 
@@ -133,27 +153,31 @@ All these attempts will be safely handled without compromising security.
 
 ### Always Use:
 1. **Parameterized Queries** - Primary defense against SQL injection
-2. **Input Validation** - Verify data meets expected format
-3. **Input Sanitization** - Remove dangerous characters
-4. **Password Hashing** - Never store plain text passwords
-5. **Error Handling** - Don't leak system information
+2. **HTML Output Escaping** - Primary defense against XSS attacks
+3. **Input Validation** - Verify data meets expected format
+4. **Input Sanitization** - Remove dangerous characters
+5. **Password Hashing** - Never store plain text passwords
+6. **Error Handling** - Don't leak system information
 
 ### Never Do:
 1. ❌ String concatenation for SQL queries
-2. ❌ Trust user input without validation
-3. ❌ Store passwords in plain text
-4. ❌ Expose detailed error messages to users
-5. ❌ Run database queries with elevated privileges
+2. ❌ Output user data directly into HTML without escaping
+3. ❌ Trust user input without validation
+4. ❌ Store passwords in plain text
+5. ❌ Expose detailed error messages to users
+6. ❌ Run database queries with elevated privileges
 
 ## Comparison with Insecure Project
 
 | Feature | Insecure Project | Secure Project |
 |---------|-----------------|----------------|
 | SQL Queries | String concatenation | Parameterized queries |
+| HTML Output | Raw (XSS vulnerable) | HTML escaped |
 | Passwords | Plain text | Bcrypt hashed |
 | Input Validation | None | Strict validation |
 | Error Messages | Detailed | Generic |
 | SQL Injection Risk | **HIGH** | **NONE** |
+| XSS Risk | **HIGH** | **NONE** |
 
 ## Learning Resources
 

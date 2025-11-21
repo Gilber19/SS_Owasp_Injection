@@ -41,6 +41,19 @@ const query = `SELECT * FROM products WHERE name LIKE '%${searchQuery}%'`;
 
 These attacks can extract sensitive data from other tables.
 
+### 3. Cross-Site Scripting (XSS)
+
+User data is displayed directly in HTML without escaping, creating XSS vulnerabilities:
+
+```javascript
+res.send(`<p>Welcome, ${row.username}!</p>`);
+```
+
+**Why this is dangerous:**
+- Malicious JavaScript could be injected through database content
+- Attackers could steal session cookies or perform actions as the victim
+- This compounds with SQL injection - attacker can inject both SQL and JavaScript
+
 ## Setup
 
 1. Install dependencies:
@@ -83,13 +96,17 @@ npm start
 2. **Data Theft**: Sensitive information (passwords, emails) can be extracted
 3. **Data Manipulation**: Attackers could modify or delete data
 4. **Privilege Escalation**: Normal users could gain admin access
+5. **Cross-Site Scripting**: Malicious scripts can be injected and executed in victim browsers
+6. **Session Hijacking**: XSS can be used to steal authentication tokens/cookies
 
 ## How to Fix
 
 See the `secure-project` directory for a properly secured version that uses:
 - Parameterized queries (prepared statements)
+- HTML output escaping to prevent XSS
 - Input validation and sanitization
 - Proper error handling
+- Password hashing with bcrypt
 - Security best practices
 
 ## Learning Resources

@@ -1,0 +1,19 @@
+{
+  "name": "secure-injection-demo",
+  "version": "1.0.0",
+  "description": "Demonstration of secure coding practices to prevent SQL Injection - SECURE VERSION",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node init-db.js"
+  },
+  "keywords": ["owasp", "sql-injection", "security", "secure"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "body-parser": "^1.20.2",
+    "bcrypt": "^5.1.1"
+  }
+}

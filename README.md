@@ -101,6 +101,16 @@ The insecure project will demonstrate how attacks work, while the secure project
 
 The insecure project is intentionally vulnerable and should **NEVER** be deployed to production or any environment accessible from the internet. It is strictly for educational purposes in controlled environments.
 
+Both projects are simplified demonstrations focusing on SQL injection and XSS prevention. Production applications require additional security measures such as:
+- Rate limiting to prevent brute-force attacks
+- CSRF protection
+- HTTPS/TLS encryption
+- Session management
+- Account lockout policies
+- Multi-factor authentication
+- Security headers (CSP, HSTS, etc.)
+- Regular security audits
+
 ## 📝 License
 
 MIT License - Feel free to use these projects for educational purposes.

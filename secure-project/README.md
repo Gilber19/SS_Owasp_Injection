@@ -189,11 +189,29 @@ All these attempts will be safely handled without compromising security.
 ## Additional Security Recommendations
 
 For production applications, also consider:
+- **Rate limiting** to prevent brute force attacks (use libraries like express-rate-limit)
 - Using an ORM (like Sequelize or TypeORM) with built-in protections
-- Implementing rate limiting to prevent brute force attacks
 - Adding CSRF protection
 - Using HTTPS for all communications
 - Implementing session management securely
 - Regular security audits and dependency updates
 - Web Application Firewall (WAF)
 - Principle of least privilege for database access
+- Multi-factor authentication (MFA)
+- Account lockout policies
+
+### Example Rate Limiting Implementation
+
+```javascript
+const rateLimit = require('express-rate-limit');
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per windowMs
+  message: 'Too many login attempts, please try again later'
+});
+
+app.post('/login', loginLimiter, (req, res) => {
+  // Login logic
+});
+```
